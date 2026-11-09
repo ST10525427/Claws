@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Orders </title>
+
+     <link rel="stylesheet" href="styles.css">
+     
+</head>
+<body>
+    <header style="display: flex; align-items: center; gap: 15px;">
+        <img
+        src="images/Claws logo 1.png.png"
+        alt="Claws logo "
+        width="100"
+        height="100"
+        />
+        <h1> CLAWS </h1>
+    </header>
+ <nav>
+    <ul style="list-style:none; display:flex; gap:25px; margin:0; padding:0;">
+         <li><a href="index.html">Home</a></li>
+                  <li><a href="about us.html">About Us</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                  <li><a href="Custom Orders.html">Custom Orders</a></li>
+                  <li><a href="Contact us.html">Contact Us</a></li>
+                   <li><a href="sizing guide.html">Sizing Guide</a></li>
+    </ul>
+ </nav>
+ <main class="custom-container">
+  <h1>Custom Orders</h1>
+   <form id="customForm" novalidate>
+            <fieldset>
+                <legend>Your Details</legend>
+
+                <label for="fullname">Full name: *</label>
+                <input type="text" id="fullname" name="fullname" placeholder="e.g. Sne Njabulo" required>
+                <span class="error" id="errName">Please enter your full name</span>
+
+                <label for="email">Email: *</label>
+                <input type="email" id="email" name="email" placeholder="you@gmail.com" required>
+                <span class="error" id="errEmail">Please enter a valid email - must contain @ and .</span>
+
+                <label for="phone">Phone number: *</label>
+                <input type="tel" id="phone" name="phone" placeholder="e.g. 0821234567" maxlength="10" required>
+                <span class="error" id="errPhone">Please enter 10 digits, e.g. 0821234567</span>
+            </fieldset>
+
+            <fieldset>
+                <legend>Your Design</legend>
+
+                <label for="shape">Nail Shape: *</label>
+                <select id="shape" name="shape" required>
+                    <option value="" disabled selected>Choose a shape</option>
+                    <option value="Almond">Almond</option>
+                    <option value="Stiletto">Stiletto</option>
+                    <option value="Square">Square</option>
+                    <option value="Coffin">Coffin</option>
+                    <option value="Oval">Oval</option>
+                    <option value="Squoval">Squoval</option>
+                </select>
+                <span class="error" id="errShape">Please choose a shape</span>
+
+                <label for="length">Preferred length: *</label>
+                <select id="length" name="length" required>
+                    <option value="" disabled selected>Choose a length</option>
+                    <option value="Short">Short (+R0)</option>
+                    <option value="Medium">Medium (+R20)</option>
+                    <option value="Long">Long (+R40)</option>
+                    <option value="Extra Long">Extra Long (+R60)</option>
+                </select>
+                <span class="error" id="errLength">Please choose a length</span>
+
+                <label for="design">Design ideas: *</label>
+                <textarea id="design" name="design" rows="4" placeholder="Describe the colours or design you would like..." required></textarea>
+                <span class="error" id="errDesign">Please describe your design</span>
+            </fieldset>
+
+            <div class="btn-row">
+                <button type="submit">Submit Custom Order</button>
+                <button type="reset">Clear</button>
+            </div>
+        </form>
+
+        <div id="orderConfirmation" class="custom-order-confirmation" role="status" aria-live="polite" hidden>
+            <h2>Your order number</h2>
+            <p id="orderNumber"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; CLAWS, All rights reserved</p>
+        <a href="mailto:st10525427@myemeris.edu.za">Email me at st10525427@myemeris.edu.za</a>
+    </footer>
+
+
+
+<script>
+  document.getElementById("customForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const design = document.getElementById("design").value.trim();
+    const shape = document.getElementById("shape").value;
+    const length = document.getElementById("length").value;
+
+    function showErr(id, showIt){ document.getElementById(id).style.display = showIt ? "block" : "none"; return showIt; }
+    let bad = false;
+    if(showErr("errName", name.length < 3)) bad = true;
+    if(showErr("errEmail", !email.includes("@") || !email.includes("."))) bad = true;
+    // Phone must be exactly 10 digits, only numbers
+    if(showErr("errPhone", !/^\d{10}$/.test(phone))) bad = true;
+    if(showErr("errShape", !shape)) bad = true;
+    if(showErr("errLength", !length)) bad = true;
+    if(showErr("errDesign", design.length < 3)) bad = true;
+    if(bad) return;
+
+    const orderNumber = "CLAWS-" + Date.now().toString().slice(-8);
+    document.getElementById("orderNumber").textContent = orderNumber;
+    document.getElementById("orderConfirmation").hidden = false;
+    document.getElementById("orderConfirmation").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("phone").addEventListener("input", function(){ this.value = this.value.replace(/\D/g,'').slice(0,10); });
+
+  document.getElementById("customForm").addEventListener("reset", function(){
+    document.getElementById("orderConfirmation").hidden = true;
+    document.querySelectorAll(".custom-container .error").forEach(function(error){
+      error.style.display = "none";
+    });
+  });
+</script>
+</body>
+</html>

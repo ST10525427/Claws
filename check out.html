@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout - CLAWS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="checkout-header">
+    <a href="shop.html"><img class="checkout-logo"
+         src="images/Claws logo 1.png.png" alt="CLAWS logo"></a>
+    <h1>CLAWS</h1>
+  </header>
+
+<div class="main checkout-main">
+
+  <div class="checkout-layout">
+    <!-- CHECKOUT FORM -->
+    <form id="checkoutForm" class="checkout-form" novalidate>
+    <h2>Your Details</h2>
+
+    <label for="fullName">Full Name </label>
+    <input type="text" id="fullName" placeholder="e.g. Sne Njabulo" required>
+    <span class="error" id="errName">Please enter your full name</span>
+
+    <label for="email">Email </label>
+    <input type="email" id="email" placeholder="e.g. you@gmail.com" required>
+    <span class="error" id="errEmail">Please enter a valid email</span>
+
+    <label for="phone">Cell Number </label>
+    <input type="tel" id="phone" placeholder="e.g. 082 123 4567" required>
+    <span class="error" id="errPhone">Please enter your cell number</span>
+
+    <h2>Delivery Address</h2>
+
+    <label for="address">Street Address</label>
+    <textarea id="address" rows="2" placeholder="House number, street, suburb" required></textarea>
+    <span class="error" id="errAddress">Please enter your address</span>
+
+    <div class="checkout-form-row">
+      <div>
+        <label for="city">City </label>
+        <input type="text" id="city" placeholder="e.g. Pretoria" required>
+      </div>
+      <div>
+        <label for="postal">Postal Code </label>
+        <input type="text" id="postal" placeholder="e.g. 0157" required>
+      </div>
+    </div>
+    <span class="error" id="errCity">Please enter city and postal code</span>
+
+    <label for="delivery">Delivery Option </label>
+    <select id="delivery" required>
+      <option value="">-- Choose delivery option --</option>
+      <option value="0">FREE - Collection Sunninghill</option>
+      <option value="60">R60 - Paxi</option>
+      <option value="100">R100 - Courier</option>
+    </select>
+    <span class="error" id="errDelivery">Please choose a delivery option</span>
+
+    <h2>Payment</h2>
+
+    <label>Payment Method</label>
+    <label><input type="radio" name="payment" value="Card" checked> Card</label>
+    <label><input type="radio" name="payment" value="EFT"> EFT / Bank Transfer</label>
+    <label><input type="radio" name="payment" value="Cash on Collection"> Cash on Collection</label>
+
+    <div id="cardFields">
+      <label for="cardNumber">Card Number</label>
+      <input type="number" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+
+      <div class="checkout-form-row">
+        <div>
+          <label for="expiry">Expiry</label>
+          <input type="number" id="expiry" placeholder="MM/YY" maxlength="5">
+        </div>
+        <div>
+          <label for="cvv">CVV</label>
+          <input type="number" id="cvv" placeholder="123" maxlength="3">
+        </div>
+      </div>
+      <span class="error" id="errCard">Please fill in card number, expiry and CVV</span>
+    </div>
+
+    <label>
+      <input type="checkbox" id="terms"> I agree to the terms and conditions 
+    </label>
+    <span class="error" id="errTerms">Please agree to the terms</span>
+
+    <br><br>
+    <button type="submit" class="place-order-button button-primary" style="width:100%; padding:15px;">
+      Place your order
+    </button>
+    <p id="successMessage" class="checkout-success-message">
+      Thank you! Your order has been placed. We will contact you soon.
+    </p>
+    </form>

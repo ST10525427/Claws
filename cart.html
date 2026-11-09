@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CLAWS Shopping Cart</title>
+
+    
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts/cart.js" defer></script>
+
+</head>
+
+<body>
+
+    <header>
+        <header style="display: flex; align-items: center; gap: 15px;">
+       <img src="images/Claws logo 1.png.png" 
+      alt="A placeholder image to be displayed here" width="100" height="100" />
+        <h1> CLAWS </h1>
+    </header>
+
+        <nav>
+            <ul style="list-style:none; display:flex; gap:25px; margin:0; padding:0;">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="cart.html">Shopping Cart (<span class="cart-count">0</span>)</a></li>
+                <li><a href="sizing guide.html">Sizing Guide</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main shopping cart section -->
+    <main class="cart-page">
+
+        <h2>Your Shopping Cart</h2>
+
+        <p id="cart-message" class="cart-message" role="status"></p>
+
+        <!-- Message displayed when the cart is empty -->
+        <p id="cart-empty" hidden>
+            Your shopping cart is empty.
+            Please visit our shop to choose your favourite nail designs.
+        </p>
+
+        <div id="cart-items"></div>
+        <h3>
+            Total:
+            <span id="cart-total">R0.00</span>
+        </h3>
+        <a href="shop.html" class="shop-button">
+            Continue Shopping
+        </a>
+
+        <a href="check out.html" id="checkout-button" class="shop-button">
+            Proceed to Checkout
+        </a>
+
+    </main>
+
+    <!-- Product list  cart/stock logic -->
+    <script src="Cart.js"></script>
+    <script src="store.js"></script>
+
+    <script>
+        var messageEl = document.getElementById("cart-message");
+        var emptyEl = document.getElementById("cart-empty");
+        var itemsEl = document.getElementById("cart-items");
+        var totalEl = document.getElementById("cart-total");
+        var checkoutBtn = document.getElementById("checkout-button");
+
+        function money(n) { return "R" + n.toFixed(2); }
+
+        // click on the photo and go to the  cart.html
+        (function handleAdd() {
+            var id = new URLSearchParams(window.location.search).get("add");
+            if (!id) return;
+            var p = getProduct(id);
+            if (p) {
+                var result = addToCart(p.id);
+                if (result === "added") messageEl.textContent = p.name + " was added to your cart.";
+                if (result === "max") messageEl.textContent = "You already have all " + unitsLeft(p.id) + " available units of " + p.name + " in your cart.";
+                if (result === "soldout") messageEl.textContent = p.name + " is sold out.";
+            }
+    
+            history.replaceState(null, "", "cart.html");
+        })();
+        //Draws the cart items on the  shop page
+        function render() {
+            var cart = getCart();
+            var ids = Object.keys(cart).filter(function (id) { return getProduct(id); });
+            itemsEl.innerHTML = "";
+
+            if (ids.length === 0) {
+                emptyEl.hidden = false;
+                checkoutBtn.style.display = "none";
+                totalEl.textContent = money(0);
+                return;
+            }
+            emptyEl.hidden = true;
+            checkoutBtn.style.display = "";
+
+            ids.forEach(function (id) {
+                var p = getProduct(id);
+                var qty = cart[id];
+                var left = unitsLeft(id);
+                var remaining = left - qty;
+
+                var row = document.createElement("div");
+                row.className = "cart-row";
+                row.innerHTML =
+                    '<img src="' + p.image + '" alt="' + p.name + '" width="120" height="150">' +
+                    '<div class="cart-info">' +
+                        '<h3>' + p.name + '</h3>' +
+                        '<p>' + p.desc + '</p>' +
+                        '<p>Price: ' + money(p.price) + '</p>' +
+                        '<p class="units-left"><strong>' + left + '</strong> unit' + (left === 1 ? '' : 's') + ' left in stock' +
+                            (remaining === 0 ? ' (you have them all in your cart)' : '') + '</p>' +
+                        '<div class="qty">' +
+                            '<button type="button" data-act="minus" data-id="' + id + '" aria-label="Decrease quantity">&minus;</button>' +
+                            '<span>' + qty + '</span>' +
+                            '<button type="button" data-act="plus" data-id="' + id + '" aria-label="Increase quantity"' + (remaining <= 0 ? ' disabled' : '') + '>+</button>' +
+                            '<button type="button" class="remove" data-act="remove" data-id="' + id + '">Remove</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="line-total">' + money(p.price * qty) + '</p>';
+                itemsEl.appendChild(row);
+            });
+
+            totalEl.textContent = money(cartTotal());
+        }
+
+        itemsEl.addEventListener("click", function (e) {
+            var btn = e.target.closest("button[data-act]");
+            if (!btn) return;
+            var id = btn.dataset.id, cart = getCart();
+            if (btn.dataset.act === "plus") setQuantity(id, (cart[id] || 0) + 1);
+            if (btn.dataset.act === "minus") setQuantity(id, (cart[id] || 0) - 1);
+            if (btn.dataset.act === "remove") removeFromCart(id);
+            messageEl.textContent = "";
+            render();
+        });
+
+        render();
+    </script>
+    
+    <footer>
+    <p>
+        &copy; web Development Code , All rights reserved
+    </p>
+    <a href="mailto:st10525427@myemeris.edu.za"> Email me at st10525427@myemeris.edu.za</a>
+  </footer>   
+    
+
+</body>
+</html>

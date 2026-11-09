@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+
+    <link rel="stylesheet" href="styles.css">
+   
+</head>
+<body>
+    <header style="display: flex; align-items: center; gap: 15px;">
+        <img
+        src="images/Claws logo 1.png.png"
+        alt="Claws logo"
+        width="100"
+        height="100"
+        />
+        <h1> CLAWS</h1>
+    </header>
+    <nav>
+        <ul style="list-style:none; display:flex; gap:25px; margin:0; padding:0;">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about us.html">About Us</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="Custom Orders.html">Custom Orders</a></li>
+            <li><a href="Contact us.html">Contact Us</a></li>
+            <li><a href="sizing guide.html">Sizing Guide</a></li>
+            <li><a href="cart.html">Cart (<span class="cart-count">0</span>)</a></li>
+        </ul>
+    </nav>
+
+    <h2><strong>Shop the collection</strong></h2>
+    <p class="shop-hint">Click a photo to add that set to your cart.</p>
+
+<!--Search and filter options-->
+
+<input type="text" id="searchInput" placeholder="Search nails">
+<select id="filterShape">
+  <option value="all">All Shapes</option>
+  <option value="stiletto">Stiletto</option>
+  <option value="almond">Almond</option>
+  <option value="square">Square</option>
+</select>
+<select id="sortList">
+  <option value="default">Sort: Featured</option>
+  <option value="cheapest">Cheapest</option>
+  <option value="expensive">Most Expensive</option>
+</select>
+
+<!--photo button 
+https://stackoverflow.com/questions/16131988/making-an-image-act-like-a-button-->
+
+<div class="shop-grid">
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=1" title="Add Savage Royalty to your cart">
+            <img src="images/nails.png" alt="Savage Royalty" />
+        </a>
+        <figcaption>Savage Royalty</figcaption>
+        <figcaption>stilleto nails</figcaption>
+        <figcaption>price: R250</figcaption>
+        <figcaption class="units-left" data-units-for="1"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=2" title="Add Parisian purr to your cart">
+            <img src="images/pexels-svliiim-34997575.jpg" alt="Parisian purr" />
+        </a>
+        <figcaption>Parisian purr</figcaption>
+        <figcaption>classic french tip</figcaption>
+        <figcaption>price: R180</figcaption>
+        <figcaption class="units-left" data-units-for="2"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=3" title="Add love letter to your cart">
+            <img src="images/pexels-linda-markaj-449376348-15491630.jpg" alt="love letter" />
+        </a>
+        <figcaption>love letter</figcaption>
+        <figcaption>Almond nails with heart design</figcaption>
+        <figcaption>price: R180</figcaption>
+        <figcaption class="units-left" data-units-for="3"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=4" title="Add Polka Bloom to your cart">
+            <img src="images/nails 2.png" alt="Polka Bloom" />
+        </a>
+        <figcaption>Polka Bloom</figcaption>
+        <figcaption>polka dot stilleto</figcaption>
+        <figcaption>price: R270</figcaption>
+        <figcaption class="units-left" data-units-for="4"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=5" title="Add Strawberry Picnic to your cart">
+            <img src="images/ari-kurniawan-qVZNmigGmFE-unsplash.jpg" alt="Strawberry Picnic" />
+        </a>
+        <figcaption>Strawberry Picnic</figcaption>
+        <figcaption>Almond nails</figcaption>
+        <figcaption>price: R200</figcaption>
+        <figcaption class="units-left" data-units-for="5"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=6" title="Add Tropical Temptation to your cart">
+            <img src="images/nail 3.png" alt="Tropical Temptation" />
+        </a>
+        <figcaption>Tropical Temptation</figcaption>
+        <figcaption>stilleto</figcaption>
+        <figcaption>price: R280</figcaption>
+        <figcaption class="units-left" data-units-for="6"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=7" title="Add fall Blossom to your cart">
+            <img src="images/nails 6.png" alt="fall Blossom" />
+        </a>
+        <figcaption>fall Blossom</figcaption>
+        <figcaption>Square nails with flower design</figcaption>
+        <figcaption>price: R300</figcaption>
+        <figcaption class="units-left" data-units-for="7"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=8" title="Add Cady cane swirl to your cart">
+            <img src="images/pexels-svliiim-34871734.jpg" alt="Cady cane swirl" />
+        </a>
+        <figcaption>Cady cane swirl</figcaption>
+        <figcaption>Almond nails with cady cane design</figcaption>
+        <figcaption>price: R185</figcaption>
+        <figcaption class="units-left" data-units-for="8"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=9" title="Add Midnight dragon to your cart">
+            <img src="images/de-aura-Y5P9SyEEQWM-unsplash.jpg" alt="Midnight dragon" />
+        </a>
+        <figcaption>Midnight dragon</figcaption>
+        <figcaption>Long stiletto, high-gloss jet black with 3D chrome abstract art, pearl accents and antique silver crest charms.</figcaption>
+        <figcaption>price: R195</figcaption>
+        <figcaption class="units-left" data-units-for="9"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=10" title="Add Silver serpent to your cart">
+            <img src="images/de-aura-p4vthnb-INw-unsplash.jpg" alt="Silver serpent" />
+        </a>
+        <figcaption>Silver serpent</figcaption>
+        <figcaption>Short almond nails, 3D chrome abstract art, pearl accents and antique silver crest charms.</figcaption>
+        <figcaption>price: R280</figcaption>
+        <figcaption class="units-left" data-units-for="10"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=11" title="Add Choco Swirl to your cart">
+            <img src="images/thu-n-minh-O-BJbUgZRuk-unsplash.jpg" alt="Choco Swirl" />
+        </a>
+        <figcaption>Choco Swirl</figcaption>
+        <figcaption>Square nails, chocolate brown, caramel swirl</figcaption>
+        <figcaption>price: R280</figcaption>
+        <figcaption class="units-left" data-units-for="11"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=12" title="Add Vampire kiss to your cart">
+            <img src="images/de-aura-NtDhTLXEonc-unsplash.jpg" alt="Vampire kiss" />
+        </a>
+        <figcaption>Vampire kiss</figcaption>
+        <figcaption>Stiletto nails, 3D art, with a touch of red</figcaption>
+        <figcaption>price: R280</figcaption>
+        <figcaption class="units-left" data-units-for="12"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=13" title="Add Silver Fang to your cart">
+            <img src="images/nail 10.png" alt="Silver Fang" />
+        </a>
+        <figcaption>Silver Fang</figcaption>
+        <figcaption>Stiletto nails, with a chrome design and a touch of silver</figcaption>
+        <figcaption>price: R250</figcaption>
+        <figcaption class="units-left" data-units-for="13"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=14" title="Add pink petal Royalty to your cart">
+            <img src="images/nails 11.png" alt="pink petal Royalty" />
+        </a>
+        <figcaption>pink petal Royalty</figcaption>
+        <figcaption>3D embossed white daisy petals, molten gold chrome drip lines, scattered gold studs</figcaption>
+        <figcaption>price: R220</figcaption>
+        <figcaption class="units-left" data-units-for="14"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=15" title="Add Cherry wine to your cart">
+            <img src="images/nails 12.png" alt="Cherry wine" />
+        </a>
+        <figcaption>Cherry wine</figcaption>
+        <figcaption>long stiletto, glossy nude with burgundy / wine aura fade at the tips</figcaption>
+        <figcaption>price: R240</figcaption>
+        <figcaption class="units-left" data-units-for="15"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=16" title="Add Jungle Blush to your cart">
+            <img src="images/nails 13.png" alt="Jungle Blush" />
+        </a>
+        <figcaption>Jungle Blush</figcaption>
+        <figcaption>long stiletto, sharp pointed zebra print white base with black stripes, edged with gold studs</figcaption>
+        <figcaption>price: R240</figcaption>
+        <figcaption class="units-left" data-units-for="16"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=17" title="Add Candy Croc to your cart">
+            <img src="images/nails 14.png" alt="Candy Croc" />
+        </a>
+        <figcaption>Candy Croc</figcaption>
+        <figcaption>long stiletto, glossy nude base with pink and lime-yellow croc-print French tips</figcaption>
+        <figcaption>price: R300</figcaption>
+        <figcaption class="units-left" data-units-for="17"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=18" title="Add Sunset leopard to your cart">
+            <img src="images/nails 15.png" alt="Sunset leopard" />
+        </a>
+        <figcaption>Sunset leopard</figcaption>
+        <figcaption>long stiletto, black and orange leopard-print French on accent nails</figcaption>
+        <figcaption>price: R270</figcaption>
+        <figcaption class="units-left" data-units-for="18"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=19" title="Add Vegas Baby to your cart">
+            <img src="images/nails 16.png" alt="Vegas Baby" />
+        </a>
+        <figcaption>Vegas Baby</figcaption>
+        <figcaption>Extra-long tapered square, glossy nude base with mixed art - cheetah French, black 8-ball design</figcaption>
+        <figcaption>price: R450</figcaption>
+        <figcaption class="units-left" data-units-for="19"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=20" title="Add Hibiscus Cutie to your cart">
+            <img src="images/nails 17.png" alt="Hibiscus Cutie" />
+        </a>
+        <figcaption>Hibiscus Cutie</figcaption>
+        <figcaption>Medium almond, glossy nude-pink base with abstract zebra-print French tips</figcaption>
+        <figcaption>price: R320</figcaption>
+        <figcaption class="units-left" data-units-for="20"></figcaption>
+    </figure>
+
+    <figure>
+        <a class="photo-btn" href="cart.html?add=21" title="Add Ocean Petal to your cart">
+            <img src="images/nails 18.png" alt="Ocean Petal" />
+        </a>
+        <figcaption>Ocean Petal</figcaption>
+        <figcaption>Long almond, glossy sheer nude base with classic white French, 3D sculpted light blue aura flowers</figcaption>
+        <figcaption>price: R320</figcaption>
+        <figcaption class="units-left" data-units-for="21"></figcaption>
+    </figure>
+
+</div>
+
+<p id="noResults" hidden>No products match your search or filters.</p>
+
+<script src="Cart.js"></script>
+<script src="store.js"></script>
+
+<footer>
+    <p>
+        &copy; web Development Code , All rights reserved
+    </p>
+    <a href="mailto:st10525427@myemeris.edu.za"> Email me at st10525427@myemeris.edu.za</a>
+  </footer>   
+    
+
+</body>
+</html>
