@@ -9,7 +9,7 @@ body {
 /* Background Image */
 /* https://www.sitepoint.com/html/background-images/ */
 
-  background-image: url('c:\\Users\\snenj\\Downloads\\Background.png');
+  background-image: url('images/Background .png');
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -170,7 +170,7 @@ body{margin:0}
     min-width: 0;
     margin: 0;
     padding: 12px;
-    background-color: #f9f8f9;
+    background-color: #f4b6db;
     border-radius: 8px;
     text-align: center;
 }
