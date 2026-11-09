@@ -1,5 +1,9 @@
 //All of the products
 
+// AI DISCLOSURE:
+// Meta AI (2026) was used to help debug the search/filter/sort logic
+// decisions were written / reviewed by the author.
+
 
 const PRODUCTS = [
   { id: 1, name: "Savage Royalty",
@@ -124,7 +128,23 @@ const PRODUCTS = [
   { id: 21, name: "Ocean Petal",
      desc: "Long almond, white French with blue flowers",
       price: 320, image: "images/nails 18.png",
+       stock: 10 },
+
+       { id: 22, name: "Scarlet fever",
+     desc: "Red stiletto nails",
+      price: 150, image: "images/nails 7.png",
+       stock: 4 },
+
+       { id: 23, name: "hot chocolate",
+     desc: "Square long dark brown nails",
+      price: 150, image: "images/nails 8.png",
+       stock: 6 },
+
+       { id: 24, name: "hot cocoa",
+      desc: "almond short  dark brown nails",
+      price: 150, image: "images/nails 9.png",
        stock: 10 }
+
 ];
 
 

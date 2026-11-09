@@ -3,7 +3,7 @@
 * Student Name : Snenjabulo Mtetwa
 * Students Number : st10525427
 * *Code attribution and Reference:
-* GitHub : Super Simple Dev , Javascript Lesson 13
+* GitHub : Super Simple Dev , Javascript 
  */
 
 //CART SAVED IN BROWSER (localStorage)
