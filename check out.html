@@ -12,6 +12,17 @@
     <h1>CLAWS</h1>
   </header>
 
+  <nav>
+    <ul style="list-style:none; display:flex; gap:25px; margin:0; padding:0;">
+         <li><a href="index.html">Home</a></li>
+                  <li><a href="about us.html">About Us</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                  <li><a href="Custom Orders.html">Custom Orders</a></li>
+                  <li><a href="Contact us.html">Contact Us</a></li>
+                   <li><a href="sizing guide.html">Sizing Guide</a></li>
+    </ul>
+ </nav>
+
 <div class="main checkout-main">
 
   <div class="checkout-layout">
@@ -20,7 +31,7 @@
     <h2>Your Details</h2>
 
     <label for="fullName">Full Name </label>
-    <input type="text" id="fullName" placeholder="e.g. Sne Njabulo" required>
+    <input type="text" id="fullName" placeholder="e.g. Snenjabulo" required>
     <span class="error" id="errName">Please enter your full name</span>
 
     <label for="email">Email </label>
@@ -41,13 +52,14 @@
       <div>
         <label for="city">City </label>
         <input type="text" id="city" placeholder="e.g. Pretoria" required>
+        <span class="error" id="errCity">Please enter your city</span>
       </div>
       <div>
         <label for="postal">Postal Code </label>
         <input type="text" id="postal" placeholder="e.g. 0157" required>
+        <span class="error" id="errPostal">Please enter your postal code</span>
       </div>
     </div>
-    <span class="error" id="errCity">Please enter city and postal code</span>
 
     <label for="delivery">Delivery Option </label>
     <select id="delivery" required>
@@ -95,3 +107,71 @@
       Thank you! Your order has been placed. We will contact you soon.
     </p>
     </form>
+  </div>
+</div>
+
+<script>
+  const checkoutForm = document.getElementById("checkoutForm");
+  const cardFields = document.getElementById("cardFields");
+  const successMessage = document.getElementById("successMessage");
+
+  function showError(id, shouldShow) {
+    document.getElementById(id).style.display = shouldShow ? "block" : "none";
+  }
+
+  function updatePaymentFields() {
+    const usesCard = document.querySelector('input[name="payment"]:checked').value === "Card";
+    cardFields.hidden = !usesCard;
+    if (!usesCard) showError("errCard", false);
+  }
+
+  document.querySelectorAll('input[name="payment"]').forEach(function (paymentOption) {
+    paymentOption.addEventListener("change", updatePaymentFields);
+  });
+  updatePaymentFields();
+
+  checkoutForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    successMessage.style.display = "none";
+
+    const fullName = document.getElementById("fullName").value.trim();
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const postal = document.getElementById("postal").value.trim();
+    const delivery = document.getElementById("delivery").value;
+    const usesCard = document.querySelector('input[name="payment"]:checked').value === "Card";
+
+    let hasErrors = false;
+    const validate = function (errorId, isInvalid) {
+      showError(errorId, isInvalid);
+      if (isInvalid) hasErrors = true;
+    };
+
+    validate("errName", !fullName);
+    validate("errEmail", !email || !emailInput.checkValidity());
+    validate("errPhone", !phone);
+    validate("errAddress", !address);
+    validate("errCity", !city);
+    validate("errPostal", !postal);
+    validate("errDelivery", !delivery);
+    validate("errCard", usesCard && (
+      !document.getElementById("cardNumber").value.trim() ||
+      !document.getElementById("expiry").value.trim() ||
+      !document.getElementById("cvv").value.trim()
+    ));
+    validate("errTerms", !document.getElementById("terms").checked);
+
+    if (hasErrors) {
+      const firstError = checkoutForm.querySelector(".error[style*='block']");
+      if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    successMessage.style.display = "block";
+  });
+</script>
+</body>
+</html>

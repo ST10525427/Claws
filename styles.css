@@ -49,8 +49,7 @@ nav {
 }
 
 header img,
-.checkout-logo,
-img[src="Claws logo"] {
+.checkout-logo {
     width: 80px;
     height: 80px;
     object-fit: contain;
@@ -97,14 +96,15 @@ img[src="Claws logo"] {
     color: #1A1A1A;
 }
 
-
-body{margin:0}
-.container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: 100vh;
+.shop-button a {
+    color: inherit;
+    text-decoration: none;
 }
+
+body {
+    margin: 0;
+}
+
 
 /* Photo acts as a button */
 .photo-btn {
@@ -333,6 +333,29 @@ body{margin:0}
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(225, 42, 134, 0.12);
         }
+
+.checkout-main {
+    width: 100%;
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.checkout-layout,
+.checkout-form {
+    width: 100%;
+}
+
+.checkout-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.checkout-form-row > div {
+    min-width: 0;
+}
+
         .checkout-form h2, .order-summary h2 {
             color: #e12a86;
             font-family: 'Playfair Display SC', serif;
@@ -346,7 +369,9 @@ body{margin:0}
             color: #4a2a35;
             text-transform: uppercase;
         }
-        .checkout-form input, .checkout-form select {
+        .checkout-form input,
+        .checkout-form select,
+        .checkout-form textarea {
             width: 100%;
             padding: 12px 14px;
             border: 1.5px solid #f8c6d8;
@@ -356,7 +381,21 @@ body{margin:0}
             box-sizing: border-box;
             font-size: 15px;
         }
-        .checkout-form input:focus, .checkout-form select:focus {
+
+        .checkout-form input[type="checkbox"],
+        .checkout-form input[type="radio"] {
+            width: auto;
+            margin: 0 6px 0 0;
+            vertical-align: middle;
+        }
+
+        .checkout-form textarea {
+            resize: vertical;
+        }
+
+        .checkout-form input:focus,
+        .checkout-form select:focus,
+        .checkout-form textarea:focus {
             outline: none;
             border-color: #e12a86;
             box-shadow: 0 0 0 4px rgba(225, 42, 134, 0.15);
@@ -372,6 +411,14 @@ body{margin:0}
   color: green;
   font-weight: bold;
   text-align: center;
+}
+
+.custom-container .error,
+.checkout-form .error {
+  display: none;
+  color: #d00000;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 
@@ -406,7 +453,6 @@ body{margin:0}
 .container img {
     width: 100%;
     height: auto;
-    object-fit: center;
     border-radius: 8%; 
 }
 
@@ -508,8 +554,8 @@ nav {
 nav ul {
     flex-wrap: wrap;
     justify-content: center;
-    column-gap: 16px !important;
-    row-gap: 8px !important;
+    column-gap: 16px;
+    row-gap: 8px ;
 }
 
 nav a {
@@ -571,6 +617,16 @@ nav a {
     .checkout-container {
         padding: 12px;
         gap: 16px;
+    }
+
+    .checkout-main {
+        margin: 20px auto;
+        padding: 0 12px;
+    }
+
+    .checkout-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
     }
 
     .checkout-form,
