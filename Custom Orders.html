@@ -84,8 +84,10 @@
         </form>
 
         <div id="orderConfirmation" class="custom-order-confirmation" role="status" aria-live="polite" hidden>
-            <h2>Your order number</h2>
+            <h2>Your custom order reference</h2>
             <p id="orderNumber"></p>
+            <p>Save this code and show it when your custom order is delivered or collected. It will also appear at checkout on this device.</p>
+            <a id="checkoutFromCustomOrder" class="shop-button" href="check out.html" hidden>Go to checkout</a>
         </div>
     </main>
 
@@ -97,41 +99,56 @@
 
 
 <script>
-  document.getElementById("customForm").addEventListener("submit", function(e){
-    e.preventDefault();
+  const customForm = document.getElementById("customForm");
 
-    const name = document.getElementById("fullname").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const design = document.getElementById("design").value.trim();
-    const shape = document.getElementById("shape").value;
-    const length = document.getElementById("length").value;
+  function showErr(id, showIt){
+const error = document.getElementById(id);
+error.style.display = showIt ? "block" : "none";
+return showIt;
+  }
 
-    function showErr(id, showIt){ document.getElementById(id).style.display = showIt ? "block" : "none"; return showIt; }
-    let bad = false;
-    if(showErr("errName", name.length < 3)) bad = true;
-    if(showErr("errEmail", !email.includes("@") || !email.includes("."))) bad = true;
-    // Phone must be exactly 10 digits, only numbers
-    if(showErr("errPhone", !/^\d{10}$/.test(phone))) bad = true;
-    if(showErr("errShape", !shape)) bad = true;
-    if(showErr("errLength", !length)) bad = true;
-    if(showErr("errDesign", design.length < 3)) bad = true;
-    if(bad) return;
+  customForm.addEventListener("submit", function(e){
+e.preventDefault();
 
-    const orderNumber = "CLAWS-" + Date.now().toString().slice(-8);
-    localStorage.setItem("claws_custom_order_code", orderNumber);
-    document.getElementById("orderNumber").textContent = orderNumber;
-    document.getElementById("orderConfirmation").hidden = false;
-    document.getElementById("orderConfirmation").scrollIntoView({ behavior: "smooth" });
+const name = document.getElementById("fullname").value.trim();
+const email = document.getElementById("email").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const design = document.getElementById("design").value.trim();
+const shape = document.getElementById("shape").value;
+const length = document.getElementById("length").value;
+
+let bad = false;
+if(showErr("errName", name.length < 3)) bad = true;
+if(showErr("errEmail", !email.includes("@") || !email.includes("."))) bad = true;
+if(showErr("errPhone", !/^\d{10}$/.test(phone))) bad = true;
+if(showErr("errShape", !shape)) bad = true;
+if(showErr("errLength", !length)) bad = true;
+if(showErr("errDesign", design.length < 3)) bad = true;
+if(bad) return;
+
+const randomBytes = new Uint32Array(1);
+window.crypto.getRandomValues(randomBytes);
+const orderNumber = "CLAWS-" + Date.now().toString(36).toUpperCase() + "-" + randomBytes[0].toString(36).toUpperCase();
+localStorage.setItem("claws_custom_order_code", orderNumber);
+document.getElementById("orderNumber").textContent = orderNumber;
+document.getElementById("orderConfirmation").hidden = false;
+document.getElementById("orderConfirmation").scrollIntoView({ behavior: "smooth" });
+
+const checkoutBtn = document.getElementById("checkoutFromCustomOrder");
+if (checkoutBtn) {
+  checkoutBtn.hidden = false;
+}
   });
 
   document.getElementById("phone").addEventListener("input", function(){ this.value = this.value.replace(/\D/g,'').slice(0,10); });
 
-  document.getElementById("customForm").addEventListener("reset", function(){
-    document.getElementById("orderConfirmation").hidden = true;
-    document.querySelectorAll(".custom-container .error").forEach(function(error){
-      error.style.display = "none";
-    });
+  customForm.addEventListener("reset", function(){
+document.getElementById("orderConfirmation").hidden = true;
+const checkoutBtn = document.getElementById("checkoutFromCustomOrder");
+if (checkoutBtn) checkoutBtn.hidden = true;
+document.querySelectorAll(".custom-container .error").forEach(function(error){
+  error.style.display = "none";
+});
   });
 </script>
 </body>

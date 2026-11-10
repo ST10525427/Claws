@@ -13,7 +13,7 @@
     <h1>CLAWS</h1>
   </header>
 
-  <nav>
+<nav>
     <ul style="list-style:none; display:flex; gap:25px; margin:0; padding:0;">
          <li><a href="index.html">Home</a></li>
                   <li><a href="about us.html">About Us</a></li>
@@ -25,38 +25,40 @@
  </nav>
 
 <div class="main checkout-main">
+
   <div class="checkout-layout">
+    <!-- CHECKOUT FORM -->
     <form id="checkoutForm" class="checkout-form" novalidate>
     <h2>Your Details</h2>
 
     <label for="fullName">Full Name </label>
-    <input type="text" id="fullName" placeholder="e.g. Snenjabulo" required>
-    <span class="error" id="errName" hidden>Please enter your full name</span>
+    <input type="text" id="fullName" placeholder="e.g. Sne Njabulo" required>
+    <span class="error" id="errName" aria-live="polite" hidden>Please enter your full name</span>
 
     <label for="email">Email </label>
     <input type="email" id="email" placeholder="e.g. you@gmail.com" required>
-    <span class="error" id="errEmail" hidden>Please enter a valid email</span>
+    <span class="error" id="errEmail" aria-live="polite" hidden>Please enter a valid email</span>
 
     <label for="phone">Cell Number </label>
     <input type="tel" id="phone" placeholder="e.g. 082 123 4567" required>
-    <span class="error" id="errPhone" hidden>Please enter your cell number</span>
+    <span class="error" id="errPhone" aria-live="polite" hidden>Please enter your cell number</span>
 
     <h2>Delivery Address</h2>
 
     <label for="address">Street Address</label>
     <textarea id="address" rows="2" placeholder="House number, street, suburb" required></textarea>
-    <span class="error" id="errAddress" hidden>Please enter your address</span>
+    <span class="error" id="errAddress" aria-live="polite" hidden>Please enter your address</span>
 
     <div class="checkout-form-row">
       <div>
         <label for="city">City </label>
         <input type="text" id="city" placeholder="e.g. Pretoria" required>
-        <span class="error" id="errCity" hidden>Please enter your city</span>
+        <span class="error" id="errCity" aria-live="polite" hidden>Please enter your city</span>
       </div>
       <div>
         <label for="postal">Postal Code </label>
         <input type="text" id="postal" placeholder="e.g. 0157" required>
-        <span class="error" id="errPostal" hidden>Please enter your postal code</span>
+        <span class="error" id="errPostal" aria-live="polite" hidden>Please enter your postal code</span>
       </div>
     </div>
 
@@ -67,70 +69,262 @@
       <option value="60">R60 - Paxi</option>
       <option value="100">R100 - Courier</option>
     </select>
-    <span class="error" id="errDelivery" hidden>Please choose a delivery option</span>
+    <span class="error" id="errDelivery" aria-live="polite" hidden>Please choose a delivery option</span>
 
     <label for="customOrderCode">Custom order reference (if applicable)</label>
     <input type="text" id="customOrderCode" readonly placeholder="Submit a custom order to generate a code">
     <small>Bring this code with you when your custom order is delivered or collected.</small>
 
     <h2>Payment</h2>
+
     <span class="payment-label">Payment Method</span>
-    <label><input type="radio" name="payment" value="Card" checked> Card</label>
-    <label><input type="radio" name="payment" value="EFT"> EFT / Bank Transfer</label>
+    <label><input type="radio" name="payment" value="EFT" checked> EFT / Bank Transfer</label>
     <label><input type="radio" name="payment" value="Cash on Collection"> Cash on Collection</label>
 
-    <div id="cardFields">
-      <label for="cardNumber">Card Number</label>
-      <input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19">
-
-      <div class="checkout-form-row">
-        <div>
-          <label for="expiry">Expiry</label>
-          <input type="text" id="expiry" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5">
-        </div>
-        <div>
-          <label for="cvv">CVV</label>
-          <input type="password" id="cvv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
-        </div>
-      </div>
-      <span class="error" id="errCard" aria-live="polite" hidden>Enter a valid card number, an unexpired MM/YY expiry date, and a 3- or 4-digit CVV.</span>
-      <p class="checkout-payment-notice">This demo validates payment details in your browser but does not process payments. Do not enter real card details.</p>
-    </div>
-
     <label>
-      <input type="checkbox" id="terms"> I confirm my order details are correct
+      <input type="checkbox" id="terms"> I agree to the terms and conditions 
     </label>
-    <span class="error" id="errTerms" hidden>Please confirm your order details</span>
+    <span class="error" id="errTerms" aria-live="polite" hidden>Please agree to the terms</span>
+    <span class="error" id="errCart" role="alert" hidden>Your cart is empty. Add an item before placing your order.</span>
 
     <br><br>
     <button type="submit" class="place-order-button button-primary" style="width:100%; padding:15px;">
-      Validate order details
+      Generate invoice
     </button>
-    <span class="error" id="errCart" role="alert" hidden>Your cart is empty. Add an item before placing your order.</span>
     <p id="successMessage" class="checkout-success-message" role="status" aria-live="polite">
-      Your details are valid. This demo does not submit orders or process payments; contact CLAWS to complete your purchase.
     </p>
     </form>
 
     <aside class="order-summary" aria-labelledby="summaryTitle">
-      <h2 id="summaryTitle">Order &amp; payment summary</h2>
-      <p class="summary-caption">Review your items and total before confirming your details.</p>
-      <ul id="summaryItems" class="summary-items" aria-live="polite"></ul>
-      <p id="summaryEmpty" class="summary-empty" hidden>Your cart is empty. Add items from the shop to continue.</p>
-      <dl class="summary-totals">
-        <div><dt>Subtotal</dt><dd id="summarySubtotal">R0.00</dd></div>
-        <div><dt>Delivery</dt><dd id="summaryDelivery">Choose an option</dd></div>
-        <div><dt>Payment method</dt><dd id="summaryPayment">Card</dd></div>
-        <div class="summary-grand-total"><dt>Total</dt><dd id="summaryTotal">R0.00</dd></div>
-      </dl>
-      <div class="payment-note">
-        <h3>Payment</h3>
-        <p>This demo validates payment details locally but does not process payments. Do not enter real card details.</p>
+      <h2 id="summaryTitle">Payment Summary</h2>
+      <p id="summaryEmpty" role="status" hidden>Your cart is empty. Add items before checking out.</p>
+      <ul id="summaryItems" class="summary-items"></ul>
+      <div class="summary-total-row">
+        <span>Subtotal</span>
+        <strong id="summarySubtotal">R0.00</strong>
+      </div>
+      <div class="summary-total-row">
+        <span>Delivery</span>
+        <strong id="summaryDelivery">Choose delivery option</strong>
+      </div>
+      <div class="summary-total-row">
+        <span>Payment method</span>
+        <strong id="summaryPayment">Card</strong>
+      </div>
+      <div class="summary-total-row summary-grand-total">
+        <span>Total</span>
+        <strong id="summaryTotal">R0.00</strong>
       </div>
     </aside>
   </div>
+  <section id="invoice" class="order-summary checkout-invoice" aria-labelledby="invoiceTitle" hidden>
+    <h2 id="invoiceTitle">CLAWS Invoice</h2>
+    <p><strong>Reference:</strong> <span id="invoiceReference"></span></p>
+    <p><strong>Date:</strong> <span id="invoiceDate"></span></p>
+    <h3>Customer</h3>
+    <p id="invoiceCustomer"></p>
+    <p id="invoiceContact"></p>
+    <p id="invoiceAddress"></p>
+    <h3>Items</h3>
+    <ul id="invoiceItems" class="summary-items"></ul>
+    <div class="summary-total-row">
+      <span>Subtotal</span>
+      <strong id="invoiceSubtotal"></strong>
+    </div>
+    <div class="summary-total-row">
+      <span>Delivery</span>
+      <strong id="invoiceDelivery"></strong>
+    </div>
+    <div class="summary-total-row">
+      <span>Payment method</span>
+      <strong id="invoicePayment"></strong>
+    </div>
+    <div class="summary-total-row summary-grand-total">
+      <span>Total due</span>
+      <strong id="invoiceTotal"></strong>
+    </div>
+    <p class="checkout-payment-notice">This is a demo invoice. No payment has been processed.</p>
+  </section>
 </div>
 
 <script src="store.js"></script>
+<script>
+  var customOrderCode = localStorage.getItem("claws_custom_order_code");
+  if (customOrderCode) {
+    document.getElementById("customOrderCode").value = customOrderCode;
+  }
+
+  var checkoutForm = document.getElementById("checkoutForm");
+  var hasSubmitted = false;
+
+  function money(amount) {
+    return "R" + amount.toFixed(2);
+  }
+
+  function checkoutItems() {
+    var cart = getCart();
+    return Object.keys(cart).reduce(function (items, id) {
+      var product = getProduct(id);
+      var quantity = Number(cart[id]);
+      if (product && Number.isInteger(quantity) && quantity > 0) {
+        items.push({ product: product, quantity: quantity });
+      }
+      return items;
+    }, []);
+  }
+
+  function renderPaymentSummary() {
+    var items = checkoutItems();
+    var itemsList = document.getElementById("summaryItems");
+    var subtotal = items.reduce(function (sum, item) {
+      return sum + item.product.price * item.quantity;
+    }, 0);
+    var deliveryValue = document.getElementById("delivery").value;
+    var deliveryFee = deliveryValue === "" ? 0 : Number(deliveryValue);
+    var selectedPayment = document.querySelector('input[name="payment"]:checked');
+
+    itemsList.replaceChildren();
+    items.forEach(function (item) {
+      var row = document.createElement("li");
+      row.className = "summary-item";
+      row.textContent = item.product.name + " × " + item.quantity + " — " +
+        money(item.product.price * item.quantity);
+      itemsList.appendChild(row);
+    });
+
+    document.getElementById("summaryEmpty").hidden = items.length > 0;
+    document.getElementById("summarySubtotal").textContent = money(subtotal);
+    document.getElementById("summaryDelivery").textContent =
+      deliveryValue === "" ? "Choose delivery option" : money(deliveryFee);
+    document.getElementById("summaryPayment").textContent =
+      selectedPayment ? selectedPayment.value : "Choose payment method";
+    document.getElementById("summaryTotal").textContent = money(subtotal + deliveryFee);
+  }
+
+  function setError(errorId, field, invalid) {
+    document.getElementById(errorId).hidden = !invalid;
+    if (field) {
+      if (invalid) field.setAttribute("aria-invalid", "true");
+      else field.removeAttribute("aria-invalid");
+    }
+    return invalid;
+  }
+
+  function validateCheckout() {
+    var firstInvalid = null;
+    function check(errorId, field, invalid) {
+      if (setError(errorId, field, invalid) && !firstInvalid) firstInvalid = field;
+    }
+
+    var fullName = document.getElementById("fullName");
+    var email = document.getElementById("email");
+    var phone = document.getElementById("phone");
+    var address = document.getElementById("address");
+    var city = document.getElementById("city");
+    var postal = document.getElementById("postal");
+    var delivery = document.getElementById("delivery");
+    var terms = document.getElementById("terms");
+    var nameParts = fullName.value.trim().split(/\s+/);
+    var phoneDigits = phone.value.replace(/\D/g, "");
+    var payment = document.querySelector('input[name="payment"]:checked');
+
+    check("errName", fullName, nameParts.length < 2 || !nameParts[0]);
+    check("errEmail", email, !email.value.trim() || !email.validity.valid);
+    check("errPhone", phone, !/^\+?[\d\s()-]+$/.test(phone.value.trim()) ||
+      phoneDigits.length < 10 || phoneDigits.length > 15);
+    check("errAddress", address, address.value.trim().length < 5);
+    check("errCity", city, city.value.trim().length < 2);
+    check("errPostal", postal, !/^\d{4}$/.test(postal.value.trim()));
+    check("errDelivery", delivery, delivery.value === "");
+
+    check("errTerms", terms, !terms.checked);
+    var cartEmpty = checkoutItems().length === 0;
+    setError("errCart", null, cartEmpty);
+    if (cartEmpty && !firstInvalid) firstInvalid = document.getElementById("errCart");
+
+    return { valid: !firstInvalid, firstInvalid: firstInvalid };
+  }
+
+  function dismissInvoice() {
+    document.getElementById("successMessage").style.display = "none";
+    document.getElementById("invoice").hidden = true;
+  }
+
+  document.getElementById("delivery").addEventListener("change", function () {
+    dismissInvoice();
+    renderPaymentSummary();
+    if (hasSubmitted) validateCheckout();
+  });
+  document.querySelectorAll('input[name="payment"]').forEach(function (radio) {
+    radio.addEventListener("change", function () {
+      dismissInvoice();
+      renderPaymentSummary();
+      if (hasSubmitted) validateCheckout();
+    });
+  });
+
+  checkoutForm.addEventListener("input", function () {
+    dismissInvoice();
+    if (hasSubmitted) validateCheckout();
+  });
+
+  function generateInvoice() {
+    var items = checkoutItems();
+    var subtotal = items.reduce(function (sum, item) {
+      return sum + item.product.price * item.quantity;
+    }, 0);
+    var delivery = document.getElementById("delivery");
+    var deliveryFee = Number(delivery.value);
+    var payment = document.querySelector('input[name="payment"]:checked').value;
+    var reference = "CLAWS-" + Date.now().toString(36).toUpperCase() + "-" +
+      Math.floor(Math.random() * 1679616).toString(36).toUpperCase().padStart(4, "0");
+    var invoiceItems = document.getElementById("invoiceItems");
+    var address = document.getElementById("address").value.trim() + ", " +
+      document.getElementById("city").value.trim() + ", " +
+      document.getElementById("postal").value.trim();
+
+    document.getElementById("invoiceReference").textContent = reference;
+    document.getElementById("invoiceDate").textContent = new Date().toLocaleString();
+    document.getElementById("invoiceCustomer").textContent =
+      document.getElementById("fullName").value.trim();
+    document.getElementById("invoiceContact").textContent =
+      document.getElementById("email").value.trim() + " | " +
+      document.getElementById("phone").value.trim();
+    document.getElementById("invoiceAddress").textContent = address;
+    document.getElementById("invoiceSubtotal").textContent = money(subtotal);
+    document.getElementById("invoiceDelivery").textContent =
+      delivery.options[delivery.selectedIndex].text + " (" + money(deliveryFee) + ")";
+    document.getElementById("invoicePayment").textContent = payment;
+    document.getElementById("invoiceTotal").textContent = money(subtotal + deliveryFee);
+    invoiceItems.replaceChildren();
+    items.forEach(function (item) {
+      var row = document.createElement("li");
+      row.className = "summary-item";
+      row.textContent = item.product.name + " × " + item.quantity + " — " +
+        money(item.product.price * item.quantity);
+      invoiceItems.appendChild(row);
+    });
+
+    document.getElementById("invoice").hidden = false;
+    document.getElementById("successMessage").textContent =
+      "Invoice generated. No payment has been processed.";
+    document.getElementById("successMessage").style.display = "block";
+    document.getElementById("invoice").scrollIntoView({ behavior: "smooth" });
+  }
+
+  checkoutForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    hasSubmitted = true;
+    var result = validateCheckout();
+    if (!result.valid) {
+      if (result.firstInvalid && result.firstInvalid.focus) result.firstInvalid.focus();
+      return;
+    }
+
+    generateInvoice();
+  });
+
+  renderPaymentSummary();
+</script>
 </body>
 </html>

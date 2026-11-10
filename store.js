@@ -395,7 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function passesLuhn(value) {
     var digits = value.replace(/\D/g, "");
-    if (!/^\d{13,19}$/.test(digits)) return false;
+    if (!/^[\d\s-]+$/.test(value) || !/^\d{16}$/.test(digits)) return false;
     var sum = 0;
     var shouldDouble = false;
     for (var i = digits.length - 1; i >= 0; i--) {
@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cardFields.hidden = !cardSelected;
     var cardInvalid = cardSelected &&
       (!passesLuhn(cardNumber.value) || !validExpiry(expiry.value.trim()) ||
-        !/^\d{3,4}$/.test(cvv.value.trim()));
+        !/^\d{3}$/.test(cvv.value.trim()));
     setError("errCard", null, cardInvalid);
     [cardNumber, expiry, cvv].forEach(function (field) {
       if (cardInvalid) field.setAttribute("aria-invalid", "true");
@@ -469,6 +469,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function dismissSuccessMessage() {
     document.getElementById("successMessage").style.display = "none";
+    document.getElementById("checkoutInvoice").hidden = true;
+  }
+
+  function createInvoice() {
+    var items = checkoutItems();
+    var subtotal = items.reduce(function (sum, item) {
+      return sum + item.product.price * item.quantity;
+    }, 0);
+    var delivery = document.getElementById("delivery");
+    var deliveryFee = Number(delivery.value);
+    var payment = document.querySelector('input[name="payment"]:checked').value;
+    var reference = "CLAWS-" + Date.now().toString(36).toUpperCase() + "-" +
+      Math.floor(Math.random() * 10000).toString().padStart(4, "0");
+    var address = [
+      document.getElementById("address").value.trim(),
+      document.getElementById("city").value.trim(),
+      document.getElementById("postal").value.trim()
+    ].join(", ");
+    var invoiceItems = document.getElementById("invoiceItems");
+
+    document.getElementById("invoiceReference").textContent = reference;
+    document.getElementById("invoiceCustomer").textContent =
+      document.getElementById("fullName").value.trim();
+    document.getElementById("invoiceEmail").textContent =
+      document.getElementById("email").value.trim();
+    document.getElementById("invoicePhone").textContent =
+      document.getElementById("phone").value.trim();
+    document.getElementById("invoiceAddress").textContent = address;
+    document.getElementById("invoiceDelivery").textContent =
+      delivery.options[delivery.selectedIndex].text;
+    document.getElementById("invoicePayment").textContent = payment;
+    document.getElementById("invoiceCustomReference").textContent =
+      document.getElementById("customOrderCode").value || "Not applicable";
+    document.getElementById("invoiceSubtotal").textContent = money(subtotal);
+    document.getElementById("invoiceDeliveryFee").textContent = money(deliveryFee);
+    document.getElementById("invoiceTotal").textContent = money(subtotal + deliveryFee);
+
+    invoiceItems.replaceChildren();
+    items.forEach(function (item) {
+      var row = document.createElement("li");
+      row.textContent = item.product.name + " × " + item.quantity + " — " +
+        money(item.product.price * item.quantity);
+      invoiceItems.appendChild(row);
+    });
+
+    document.getElementById("checkoutInvoice").hidden = false;
+    document.getElementById("checkoutInvoice").scrollIntoView({ behavior: "smooth" });
   }
 
   document.getElementById("delivery").addEventListener("change", function () {
@@ -496,7 +543,12 @@ document.addEventListener("DOMContentLoaded", function () {
       if (result.firstInvalid && result.firstInvalid.focus) result.firstInvalid.focus();
       return;
     }
+    createInvoice();
     document.getElementById("successMessage").style.display = "block";
+  });
+
+  document.getElementById("printInvoice").addEventListener("click", function () {
+    window.print();
   });
 
   cardFields.hidden = document.querySelector('input[name="payment"]:checked').value !== "Card";

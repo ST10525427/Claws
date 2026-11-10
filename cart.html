@@ -9,13 +9,13 @@
 
     
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css">
+
 </head>
 
 <body>
 
-    <header>
-        <header style="display: flex; align-items: center; gap: 15px;">
+    <header style="display: flex; align-items: center; gap: 15px;">
        <img src="images/Claws logo 1.png.png" 
       alt="A placeholder image to be displayed here" width="100" height="100" />
         <h1> CLAWS </h1>
@@ -29,7 +29,6 @@
                 <li><a href="sizing guide.html">Sizing Guide</a></li>
             </ul>
         </nav>
-    </header>
 
     <!-- Main shopping cart section -->
     <main class="cart-page">
@@ -59,28 +58,16 @@
 
     </main>
 
+    
+
     <!-- Product list  cart/stock logic -->
     <script src="store.js"></script>
 
-    <!-- lightbox2 library for image viewing -->
-    <!-- https://github.com/lokesh/Dhakar -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 
-    <script>
-        lightbox.option({
-            'resizeDuration': 200,
-            'wrapAround': true
-        })
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-
-
-
-    <!-- https://github.com/kasuboski/client-side-cart-example/blob/main/index.html 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
+<!-- https://github.com/kasuboski/client-side-cart-example/blob/main/index.html
      Josh Kasuboski-->
-
 
     <script>
         var messageEl = document.getElementById("cart-message");
@@ -88,7 +75,6 @@
         var itemsEl = document.getElementById("cart-items");
         var totalEl = document.getElementById("cart-total");
         var checkoutBtn = document.getElementById("checkout-button");
-
         function money(n) { return "R" + n.toFixed(2); }
 
         // click on the photo and go to the  cart.html
@@ -99,7 +85,7 @@
             if (p) {
                 var result = addToCart(p.id);
                 if (result === "added") messageEl.textContent = p.name + " was added to your cart.";
-                if (result === "max") messageEl.textContent = "You already have all " + unitsLeft(p.id) + " available units of " + p.name + " in your cart.";
+                if (result === "max") messageEl.textContent = "You already have all " + p.stock + " available units of " + p.name + " in your cart.";
                 if (result === "soldout") messageEl.textContent = p.name + " is sold out.";
             }
     
@@ -124,12 +110,11 @@
                 var p = getProduct(id);
                 var qty = cart[id];
                 var left = unitsLeft(id);
-                var remaining = left - qty;
 
                 var row = document.createElement("div");
                 row.className = "cart-row";
                 row.innerHTML =
-                    '<a href="' + p.image + '" data-lightbox="cart" data-title="' + p.name + '">' +
+                    '<a class="cart-image-link" href="' + p.image + '" data-lightbox="cart-products" data-title="' + p.name + '">' +
                         '<img src="' + p.image + '" alt="' + p.name + '" width="120" height="150">' +
                     '</a>' +
                     '<div class="cart-info">' +
@@ -137,11 +122,11 @@
                         '<p>' + p.desc + '</p>' +
                         '<p>Price: ' + money(p.price) + '</p>' +
                         '<p class="units-left"><strong>' + left + '</strong> unit' + (left === 1 ? '' : 's') + ' left in stock' +
-                            (remaining === 0 ? ' (you have them all in your cart)' : '') + '</p>' +
+                            (left === 0 ? ' (you have them all in your cart)' : '') + '</p>' +
                         '<div class="qty">' +
                             '<button type="button" data-act="minus" data-id="' + id + '" aria-label="Decrease quantity">&minus;</button>' +
                             '<span>' + qty + '</span>' +
-                            '<button type="button" data-act="plus" data-id="' + id + '" aria-label="Increase quantity"' + (remaining <= 0 ? ' disabled' : '') + '>+</button>' +
+                            '<button type="button" data-act="plus" data-id="' + id + '" aria-label="Increase quantity"' + (left <= 0 ? ' disabled' : '') + '>+</button>' +
                             '<button type="button" class="remove" data-act="remove" data-id="' + id + '">Remove</button>' +
                         '</div>' +
                     '</div>' +
@@ -167,12 +152,10 @@
     </script>
     
     <footer>
-    <p>
-        &copy; web Development Code , All rights reserved
-    </p>
-    <a href="mailto:st10525427@myemeris.edu.za"> Email me at st10525427@myemeris.edu.za</a>
-  </footer>   
-    
+        <p>&copy; CLAWS, All rights reserved.</p>
+        <a href="mailto:st10525427@myemeris.edu.za">Email me at st10525427@myemeris.edu.za</a>
+    </footer>
+
 
 </body>
 </html>
