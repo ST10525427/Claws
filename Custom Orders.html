@@ -119,6 +119,7 @@
     if(bad) return;
 
     const orderNumber = "CLAWS-" + Date.now().toString().slice(-8);
+    localStorage.setItem("claws_custom_order_code", orderNumber);
     document.getElementById("orderNumber").textContent = orderNumber;
     document.getElementById("orderConfirmation").hidden = false;
     document.getElementById("orderConfirmation").scrollIntoView({ behavior: "smooth" });

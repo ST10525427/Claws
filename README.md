@@ -148,6 +148,6 @@ The combination of HTML, CSS, soft pink colours, white backgrounds, and gold acc
 
 Checkout Validation and Payment Summary
 ---------------------------------------
-The checkout logic in `store.js` validates customer and delivery details and shows a live item, delivery, and payment summary. Customers should contact the business to arrange payment after reviewing their order.
+The checkout logic in `store.js` validates customer and delivery details, demonstrates local payment-field validation, and shows a live item, delivery, and payment summary. The demo does not submit orders or process payments.
 
-The site does not collect or transmit card numbers, expiry dates, or CVV.
+Do not enter real card numbers, expiry dates, or CVV. Use a payment provider with secure server-side processing for real transactions.

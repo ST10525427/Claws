@@ -478,15 +478,24 @@ body {
   text-align: center;
 }
 
-.custom-container .error,
-.checkout-form .error {
+.custom-container .error {
   display: none;
   color: #d00000;
   font-size: 14px;
   font-weight: bold;
 }
 
-.checkout-form .error.is-visible {
+.checkout-form .error {
+  color: #d00000;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.checkout-form .error[hidden] {
+  display: none;
+}
+
+.checkout-form .error:not([hidden]) {
   display: block;
 }
 
