@@ -9,6 +9,7 @@
 
     
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
 </head>
 
 <body>
@@ -60,6 +61,20 @@
 
     <!-- Product list  cart/stock logic -->
     <script src="store.js"></script>
+
+    <!-- lightbox2 library for image viewing -->
+    <!-- https://github.com/lokesh/Dhakar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+    <script>
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        })
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 
 
 
@@ -114,7 +129,9 @@
                 var row = document.createElement("div");
                 row.className = "cart-row";
                 row.innerHTML =
-                    '<img src="' + p.image + '" alt="' + p.name + '" width="120" height="150">' +
+                    '<a href="' + p.image + '" data-lightbox="cart" data-title="' + p.name + '">' +
+                        '<img src="' + p.image + '" alt="' + p.name + '" width="120" height="150">' +
+                    '</a>' +
                     '<div class="cart-info">' +
                         '<h3>' + p.name + '</h3>' +
                         '<p>' + p.desc + '</p>' +

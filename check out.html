@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Checkout - CLAWS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
@@ -24,9 +25,7 @@
  </nav>
 
 <div class="main checkout-main">
-
   <div class="checkout-layout">
-    <!-- CHECKOUT FORM -->
     <form id="checkoutForm" class="checkout-form" novalidate>
     <h2>Your Details</h2>
 
@@ -71,107 +70,40 @@
     <span class="error" id="errDelivery">Please choose a delivery option</span>
 
     <h2>Payment</h2>
-
-    <label>Payment Method</label>
-    <label><input type="radio" name="payment" value="Card" checked> Card</label>
-    <label><input type="radio" name="payment" value="EFT"> EFT / Bank Transfer</label>
-    <label><input type="radio" name="payment" value="Cash on Collection"> Cash on Collection</label>
-
-    <div id="cardFields">
-      <label for="cardNumber">Card Number</label>
-      <input type="number" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
-
-      <div class="checkout-form-row">
-        <div>
-          <label for="expiry">Expiry</label>
-          <input type="number" id="expiry" placeholder="MM/YY" maxlength="5">
-        </div>
-        <div>
-          <label for="cvv">CVV</label>
-          <input type="number" id="cvv" placeholder="123" maxlength="3">
-        </div>
-      </div>
-      <span class="error" id="errCard">Please fill in card number, expiry and CVV</span>
-    </div>
+    <p>Payment will be arranged with us on WhatsApp. Do not enter card details on this website.</p>
 
     <label>
-      <input type="checkbox" id="terms"> I agree to the terms and conditions 
+      <input type="checkbox" id="terms"> I confirm my order details are correct
     </label>
-    <span class="error" id="errTerms">Please agree to the terms</span>
+    <span class="error" id="errTerms">Please confirm your order details</span>
 
     <br><br>
     <button type="submit" class="place-order-button button-primary" style="width:100%; padding:15px;">
-      Place your order
+      Validate Order Details
     </button>
-    <p id="successMessage" class="checkout-success-message">
-      Thank you! Your order has been placed. We will contact you soon.
+    <p id="successMessage" class="checkout-success-message" role="status" aria-live="polite">
+      Your details are valid. Review the summary and contact us to arrange payment.
     </p>
     </form>
+
+    <aside class="order-summary" aria-labelledby="summaryTitle">
+      <h2 id="summaryTitle">Order &amp; payment summary</h2>
+      <p class="summary-caption">Review your items and total before confirming your details.</p>
+      <ul id="summaryItems" class="summary-items" aria-live="polite"></ul>
+      <p id="summaryEmpty" class="summary-empty" hidden>Your cart is empty. Add items from the shop to continue.</p>
+      <dl class="summary-totals">
+        <div><dt>Subtotal</dt><dd id="summarySubtotal">R0.00</dd></div>
+        <div><dt>Delivery</dt><dd id="summaryDelivery">Choose an option</dd></div>
+        <div class="summary-grand-total"><dt>Total</dt><dd id="summaryTotal">R0.00</dd></div>
+      </dl>
+      <div class="payment-note">
+        <h3>Payment</h3>
+        <p>Contact us to arrange payment after reviewing your order. No card details are collected on this website.</p>
+      </div>
+    </aside>
   </div>
 </div>
 
-<script>
-  const checkoutForm = document.getElementById("checkoutForm");
-  const cardFields = document.getElementById("cardFields");
-  const successMessage = document.getElementById("successMessage");
-
-  function showError(id, shouldShow) {
-    document.getElementById(id).style.display = shouldShow ? "block" : "none";
-  }
-
-  function updatePaymentFields() {
-    const usesCard = document.querySelector('input[name="payment"]:checked').value === "Card";
-    cardFields.hidden = !usesCard;
-    if (!usesCard) showError("errCard", false);
-  }
-
-  document.querySelectorAll('input[name="payment"]').forEach(function (paymentOption) {
-    paymentOption.addEventListener("change", updatePaymentFields);
-  });
-  updatePaymentFields();
-
-  checkoutForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    successMessage.style.display = "none";
-
-    const fullName = document.getElementById("fullName").value.trim();
-    const emailInput = document.getElementById("email");
-    const email = emailInput.value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const city = document.getElementById("city").value.trim();
-    const postal = document.getElementById("postal").value.trim();
-    const delivery = document.getElementById("delivery").value;
-    const usesCard = document.querySelector('input[name="payment"]:checked').value === "Card";
-
-    let hasErrors = false;
-    const validate = function (errorId, isInvalid) {
-      showError(errorId, isInvalid);
-      if (isInvalid) hasErrors = true;
-    };
-
-    validate("errName", !fullName);
-    validate("errEmail", !email || !emailInput.checkValidity());
-    validate("errPhone", !phone);
-    validate("errAddress", !address);
-    validate("errCity", !city);
-    validate("errPostal", !postal);
-    validate("errDelivery", !delivery);
-    validate("errCard", usesCard && (
-      !document.getElementById("cardNumber").value.trim() ||
-      !document.getElementById("expiry").value.trim() ||
-      !document.getElementById("cvv").value.trim()
-    ));
-    validate("errTerms", !document.getElementById("terms").checked);
-
-    if (hasErrors) {
-      const firstError = checkoutForm.querySelector(".error[style*='block']");
-      if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-
-    successMessage.style.display = "block";
-  });
-</script>
+<script src="store.js"></script>
 </body>
 </html>

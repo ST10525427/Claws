@@ -146,4 +146,8 @@ Conclusion
 The Claws website was created to provide customers with an attractive and easy-to-use platform for exploring and ordering press-on nails.
 The combination of HTML, CSS, soft pink colours, white backgrounds, and gold accents creates a consistent brand identity. The project also helped develop important web-development skills such as responsive design, file organisation, styling, and troubleshooting.
 
+Checkout Validation and Payment Summary
+---------------------------------------
+The checkout logic in `store.js` validates customer and delivery details and shows a live item, delivery, and payment summary. Customers should contact the business to arrange payment after reviewing their order.
 
+The site does not collect or transmit card numbers, expiry dates, or CVV.

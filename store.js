@@ -337,3 +337,136 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   updateStockIndicators();
 });
+
+(function initializeCheckout() {
+  var checkoutForm = document.getElementById("checkoutForm");
+  if (!checkoutForm) return;
+
+  var checkoutFields = [
+    { input: "fullName", error: "errName" },
+    { input: "email", error: "errEmail" },
+    { input: "phone", error: "errPhone" },
+    { input: "address", error: "errAddress" },
+    { input: "city", error: "errCity" },
+    { input: "postal", error: "errPostal" },
+    { input: "delivery", error: "errDelivery" },
+    { input: "terms", error: "errTerms" }
+  ];
+  var orderSummary = document.getElementById("summaryItems");
+  var deliverySelect = document.getElementById("delivery");
+  var attemptedSubmit = false;
+
+  function money(amount) {
+    return "R" + amount.toFixed(2);
+  }
+
+  function fieldIsValid(fieldId) {
+    var field = document.getElementById(fieldId);
+    var value = field.value.trim();
+
+    if (fieldId === "fullName") return value.length >= 3;
+    if (fieldId === "email") return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    if (fieldId === "phone") {
+      var digits = value.replace(/\D/g, "");
+      return /^0\d{9}$/.test(digits) || /^27\d{9}$/.test(digits);
+    }
+    if (fieldId === "address") return value.length >= 5;
+    if (fieldId === "city") return value.length >= 2;
+    if (fieldId === "postal") return /^\d{4}$/.test(value);
+    if (fieldId === "delivery") return value !== "";
+    if (fieldId === "terms") return field.checked;
+    return true;
+  }
+
+  function showFieldError(field, showError) {
+    var input = document.getElementById(field.input);
+    var error = document.getElementById(field.error);
+    error.classList.toggle("is-visible", showError);
+    if (input.type !== "checkbox") {
+      input.setAttribute("aria-invalid", showError ? "true" : "false");
+    }
+    return !showError;
+  }
+
+  function updateSummary() {
+    var cart = getCart();
+    var subtotal = 0;
+    var itemCount = 0;
+    orderSummary.replaceChildren();
+
+    Object.keys(cart).forEach(function (id) {
+      var product = getProduct(id);
+      var quantity = Number(cart[id]);
+      if (!product || !Number.isInteger(quantity) || quantity < 1) return;
+
+      subtotal += product.price * quantity;
+      itemCount += quantity;
+
+      var item = document.createElement("li");
+      item.className = "summary-item";
+
+      var details = document.createElement("span");
+      details.className = "summary-item-name";
+      details.textContent = product.name + " ";
+      var quantityLabel = document.createElement("span");
+      quantityLabel.className = "summary-item-quantity";
+      quantityLabel.textContent = "× " + quantity;
+      details.appendChild(quantityLabel);
+
+      var price = document.createElement("span");
+      price.className = "summary-item-price";
+      price.textContent = money(product.price * quantity);
+      item.append(details, price);
+      orderSummary.appendChild(item);
+    });
+
+    var deliveryCost = deliverySelect.value === "" ? null : Number(deliverySelect.value);
+    var total = subtotal + (deliveryCost || 0);
+    document.getElementById("summarySubtotal").textContent = money(subtotal);
+    document.getElementById("summaryDelivery").textContent =
+      deliveryCost === null ? "Choose an option" : money(deliveryCost);
+    document.getElementById("summaryTotal").textContent = money(total);
+    document.getElementById("summaryEmpty").hidden = itemCount > 0;
+    checkoutForm.querySelector('[type="submit"]').disabled = itemCount === 0;
+  }
+
+  checkoutFields.forEach(function (field) {
+    var input = document.getElementById(field.input);
+    input.setAttribute("aria-describedby", field.error);
+    input.addEventListener(input.tagName === "SELECT" || input.type === "checkbox" ? "change" : "input", function () {
+      if (attemptedSubmit) showFieldError(field, !fieldIsValid(field.input));
+      if (field.input === "delivery") updateSummary();
+      document.getElementById("successMessage").classList.remove("is-visible");
+    });
+    input.addEventListener("blur", function () {
+      if (input.value.trim() || input.type === "checkbox" || input.tagName === "SELECT") {
+        showFieldError(field, !fieldIsValid(field.input));
+      }
+    });
+  });
+
+  checkoutForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    attemptedSubmit = true;
+    var firstInvalid = null;
+    var isValid = true;
+
+    checkoutFields.forEach(function (field) {
+      var fieldValid = showFieldError(field, !fieldIsValid(field.input));
+      if (!fieldValid) {
+        isValid = false;
+        if (!firstInvalid) firstInvalid = document.getElementById(field.input);
+      }
+    });
+
+    if (!isValid) {
+      document.getElementById("successMessage").classList.remove("is-visible");
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+
+    document.getElementById("successMessage").classList.add("is-visible");
+  });
+
+  updateSummary();
+})();
