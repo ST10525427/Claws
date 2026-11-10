@@ -42,10 +42,18 @@ p {
 
 /* Navigation - Anchoring */
 nav {
-    background-color:#fce4ec;
+    background-color:#f8dbe5;
     padding: 45px;
     position: sticky;
     top: 0;
+}
+
+.footer {
+    background-color: #f8dbe5;
+    padding: 20px;
+    text-align: center;
+    color: #1A1A1A;
+    font-size: 14px;
 }
 
 header img,

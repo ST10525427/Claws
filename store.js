@@ -447,18 +447,7 @@ document.addEventListener("DOMContentLoaded", function () {
     check("errPostal", postal, !/^\d{4}$/.test(postal.value.trim()));
     check("errDelivery", delivery, delivery.value === "");
 
-    var cardSelected = payment && payment.value === "Card";
-    cardFields.hidden = !cardSelected;
-    var cardInvalid = cardSelected &&
-      (!passesLuhn(cardNumber.value) || !validExpiry(expiry.value.trim()) ||
-        !/^\d{3}$/.test(cvv.value.trim()));
-    setError("errCard", null, cardInvalid);
-    [cardNumber, expiry, cvv].forEach(function (field) {
-      if (cardInvalid) field.setAttribute("aria-invalid", "true");
-      else field.removeAttribute("aria-invalid");
-    });
-    if (cardInvalid && !firstInvalid) firstInvalid = cardNumber;
-
+    
     check("errTerms", terms, !terms.checked);
     var cartEmpty = checkoutItems().length === 0;
     setError("errCart", null, cartEmpty);
@@ -551,6 +540,5 @@ document.addEventListener("DOMContentLoaded", function () {
     window.print();
   });
 
-  cardFields.hidden = document.querySelector('input[name="payment"]:checked').value !== "Card";
-  renderPaymentSummary();
+ 
 })();
