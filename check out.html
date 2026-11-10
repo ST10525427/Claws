@@ -104,6 +104,213 @@
   </div>
 </div>
 
+
+ <aside class="order-summary" aria-labelledby="summaryTitle">
+      <h2 id="summaryTitle">Payment Summary</h2>
+      <p id="summaryEmpty" role="status" hidden>Your cart is empty. Add items before checking out.</p>
+      <ul id="summaryItems" class="summary-items"></ul>
+      <div class="summary-total-row">
+        <span>Subtotal</span>
+        <strong id="summarySubtotal">R0.00</strong>
+      </div>
+      <div class="summary-total-row">
+        <span>Delivery</span>
+        <strong id="summaryDelivery">Choose delivery option</strong>
+      </div>
+      <div class="summary-total-row">
+        <span>Payment method</span>
+        <strong id="summaryPayment">Card</strong>
+      </div>
+      <div class="summary-total-row summary-grand-total">
+        <span>Total</span>
+        <strong id="summaryTotal">R0.00</strong>
+      </div>
+    </aside>
+  </div>
+</div>
+
 <script src="store.js"></script>
+<script>
+  var customOrderCode = localStorage.getItem("claws_custom_order_code");
+  if (customOrderCode) {
+    document.getElementById("customOrderCode").value = customOrderCode;
+  }
+
+  var checkoutForm = document.getElementById("checkoutForm");
+  var cardFields = document.getElementById("cardFields");
+  var cardNumber = document.getElementById("cardNumber");
+  var expiry = document.getElementById("expiry");
+  var cvv = document.getElementById("cvv");
+  var hasSubmitted = false;
+
+  function money(amount) {
+    return "R" + amount.toFixed(2);
+  }
+
+  function checkoutItems() {
+    var cart = getCart();
+    return Object.keys(cart).reduce(function (items, id) {
+      var product = getProduct(id);
+      var quantity = Number(cart[id]);
+      if (product && Number.isInteger(quantity) && quantity > 0) {
+        items.push({ product: product, quantity: quantity });
+      }
+      return items;
+    }, []);
+  }
+
+  function renderPaymentSummary() {
+    var items = checkoutItems();
+    var itemsList = document.getElementById("summaryItems");
+    var subtotal = items.reduce(function (sum, item) {
+      return sum + item.product.price * item.quantity;
+    }, 0);
+    var deliveryValue = document.getElementById("delivery").value;
+    var deliveryFee = deliveryValue === "" ? 0 : Number(deliveryValue);
+    var selectedPayment = document.querySelector('input[name="payment"]:checked');
+
+    itemsList.replaceChildren();
+    items.forEach(function (item) {
+      var row = document.createElement("li");
+      row.className = "summary-item";
+      row.textContent = item.product.name + " × " + item.quantity + " — " +
+        money(item.product.price * item.quantity);
+      itemsList.appendChild(row);
+    });
+
+    document.getElementById("summaryEmpty").hidden = items.length > 0;
+    document.getElementById("summarySubtotal").textContent = money(subtotal);
+    document.getElementById("summaryDelivery").textContent =
+      deliveryValue === "" ? "Choose delivery option" : money(deliveryFee);
+    document.getElementById("summaryPayment").textContent =
+      selectedPayment ? selectedPayment.value : "Choose payment method";
+    document.getElementById("summaryTotal").textContent = money(subtotal + deliveryFee);
+  }
+
+  function setError(errorId, field, invalid) {
+    document.getElementById(errorId).hidden = !invalid;
+    if (field) {
+      if (invalid) field.setAttribute("aria-invalid", "true");
+      else field.removeAttribute("aria-invalid");
+    }
+    return invalid;
+  }
+
+  function passesLuhn(value) {
+    var digits = value.replace(/\D/g, "");
+    if (!/^\d{13,19}$/.test(digits)) return false;
+    var sum = 0;
+    var shouldDouble = false;
+    for (var i = digits.length - 1; i >= 0; i--) {
+      var digit = Number(digits[i]);
+      if (shouldDouble) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+  }
+
+  function validExpiry(value) {
+    var match = /^(0[1-9]|1[0-2])\/(\d{2})$/.exec(value);
+    if (!match) return false;
+    var month = Number(match[1]);
+    var year = 2000 + Number(match[2]);
+    var today = new Date();
+    return year > today.getFullYear() ||
+      (year === today.getFullYear() && month >= today.getMonth() + 1);
+  }
+
+  function validateCheckout() {
+    var firstInvalid = null;
+    function check(errorId, field, invalid) {
+      if (setError(errorId, field, invalid) && !firstInvalid) firstInvalid = field;
+    }
+
+    var fullName = document.getElementById("fullName");
+    var email = document.getElementById("email");
+    var phone = document.getElementById("phone");
+    var address = document.getElementById("address");
+    var city = document.getElementById("city");
+    var postal = document.getElementById("postal");
+    var delivery = document.getElementById("delivery");
+    var terms = document.getElementById("terms");
+    var nameParts = fullName.value.trim().split(/\s+/);
+    var phoneDigits = phone.value.replace(/\D/g, "");
+    var payment = document.querySelector('input[name="payment"]:checked');
+
+    check("errName", fullName, nameParts.length < 2 || !nameParts[0]);
+    check("errEmail", email, !email.value.trim() || !email.validity.valid);
+    check("errPhone", phone, !/^\+?[\d\s()-]+$/.test(phone.value.trim()) ||
+      phoneDigits.length < 10 || phoneDigits.length > 15);
+    check("errAddress", address, address.value.trim().length < 5);
+    check("errCity", city, city.value.trim().length < 2);
+    check("errPostal", postal, !/^\d{4}$/.test(postal.value.trim()));
+    check("errDelivery", delivery, delivery.value === "");
+
+    var cardSelected = payment && payment.value === "Card";
+    cardFields.hidden = !cardSelected;
+    var cardInvalid = cardSelected &&
+      (!passesLuhn(cardNumber.value) || !validExpiry(expiry.value.trim()) ||
+        !/^\d{3,4}$/.test(cvv.value.trim()));
+    setError("errCard", null, cardInvalid);
+    [cardNumber, expiry, cvv].forEach(function (field) {
+      if (cardInvalid) field.setAttribute("aria-invalid", "true");
+      else field.removeAttribute("aria-invalid");
+    });
+    if (cardInvalid && !firstInvalid) firstInvalid = cardNumber;
+
+    check("errTerms", terms, !terms.checked);
+    var cartEmpty = checkoutItems().length === 0;
+    setError("errCart", null, cartEmpty);
+    if (cartEmpty && !firstInvalid) firstInvalid = document.getElementById("errCart");
+
+    return { valid: !firstInvalid, firstInvalid: firstInvalid };
+  }
+
+  function dismissSuccessMessage() {
+    document.getElementById("successMessage").style.display = "none";
+  }
+
+  document.getElementById("delivery").addEventListener("change", function () {
+    dismissSuccessMessage();
+    renderPaymentSummary();
+    if (hasSubmitted) validateCheckout();
+  });
+  document.querySelectorAll('input[name="payment"]').forEach(function (radio) {
+    radio.addEventListener("change", function () {
+      dismissSuccessMessage();
+      cardFields.hidden = radio.value !== "Card";
+      renderPaymentSummary();
+      if (hasSubmitted) validateCheckout();
+    });
+  });
+  checkoutForm.addEventListener("input", function () {
+    dismissSuccessMessage();
+    if (hasSubmitted) validateCheckout();
+  });
+  checkoutForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    hasSubmitted = true;
+    var result = validateCheckout();
+    if (!result.valid) {
+      if (result.firstInvalid && result.firstInvalid.focus) result.firstInvalid.focus();
+      return;
+    }
+
+    document.getElementById("successMessage").style.display = "block";
+  });
+
+  cardFields.hidden = document.querySelector('input[name="payment"]:checked').value !== "Card";
+  renderPaymentSummary();
+</script>
+</body>
+</html>
+
+<script src="store.js"></script>
+
+
 </body>
 </html>
